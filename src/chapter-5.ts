@@ -57,7 +57,6 @@ Shoe.create("boot"); // Boot
 Shoe.create("sneaker"); // Sneaker
 
 // 4. [Hard] As an exercise, think about how you might design a typesafe builder pattern. Extend the Builder pattern Builder Pattern example from earlier in this chapter to:
-
 // 4a. Guarantee at compile time that someone can’t call .send() before setting at least URL and method. Would it be easier to make this guarantee if you also force the user to call methods in a specific order? (Hint: what can you return instead of this?)
 
 class RequestBuilder {
@@ -68,6 +67,7 @@ class RequestBuilder {
   setMethod(method: "get" | "post"): RequestBuilderWithMethod {
     return new RequestBuilderWithMethod().setMethod(method).setData(this.data);
   }
+
   setData(data: object | null): this {
     this.data = data;
     return this;
@@ -79,6 +79,7 @@ class RequestBuilderWithMethod extends RequestBuilder {
     this.method = method;
     return this;
   }
+
   setURL(url: string): RequestBuilderWithMethodAndURL {
     return new RequestBuilderWithMethodAndURL()
       .setMethod(this.method)
@@ -92,6 +93,7 @@ class RequestBuilderWithMethodAndURL extends RequestBuilderWithMethod {
     this.url = url;
     return this;
   }
+
   send() {
     // ...
   }
@@ -100,9 +102,7 @@ class RequestBuilderWithMethodAndURL extends RequestBuilderWithMethod {
 new RequestBuilder().setMethod("get").setData({}).setURL("foo.com").send();
 
 // 4b. [Harder] How would you change your design if you wanted to make this guarantee, but still let people call methods in any order?
-
 // (This answer courtesy of @albertywu)
-
 interface BuildableRequest {
   data?: object;
   method: "get" | "post";
